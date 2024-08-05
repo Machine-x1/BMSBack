@@ -5,10 +5,16 @@ import connectToDatabase from "./src/config/DBConnect";
 import categoryRouter from "./src/routes/categoryRoute";
 import brandsRouter from "./src/routes/brandRoute";
 import { projectRouter } from "./src/routes/projectRoute";
+var path = require('path');
+import cors from 'cors';
 
 const app = express();
 app.use(json())
 connectToDatabase()
+app.use(cors());
+
+
+app.use("/public", express.static("public"));
 app.use("/product", productRouter);
 app.use("/category", categoryRouter);
 app.use("/brand", brandsRouter);

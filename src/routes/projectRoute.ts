@@ -6,7 +6,7 @@ import { createProject, getProject, getProjects } from "../controllers/projectsC
 
 const storage: multer.StorageEngine = multer.diskStorage({
   destination: (req: Request, file: Express.Multer.File, cb: (error: Error | null, destination: string) => void) => {
-    cb(null, path.join(__dirname, '../uploads/'));
+    cb(null, path.join(__dirname, '/public/images'));
   },
   filename: (req: Request, file: Express.Multer.File, cb: (error: Error | null, filename: string) => void) => {
     const fileExtension = path.extname(file.originalname);
