@@ -7,6 +7,7 @@ import brandsRouter from "./src/routes/brandRoute";
 import { projectRouter } from "./src/routes/projectRoute";
 var path = require('path');
 import cors from 'cors';
+import orderRouter from "./src/routes/ordersRoute";
 
 const app = express();
 app.use(json())
@@ -19,6 +20,7 @@ app.use("/product", productRouter);
 app.use("/category", categoryRouter);
 app.use("/brand", brandsRouter);
 app.use("/project", projectRouter);
+app.use("/order", orderRouter);
 
 app.listen(8000 || process.env.PORT, () => {
   console.log("Server is running on port " + 8000 || process.env.PORT);

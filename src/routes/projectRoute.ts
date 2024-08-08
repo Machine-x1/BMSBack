@@ -2,7 +2,7 @@ import express, { Request, Response, Router } from "express";
 import multer, { Multer } from "multer";
 import path from "path";
 import { v4 as uuidv4 } from 'uuid';
-import { createProject, getProject, getProjects } from "../controllers/projectsController";
+import { createProject, deleteProject, getProject, getProjects } from "../controllers/projectsController";
 
 const storage: multer.StorageEngine = multer.diskStorage({
   destination: (req: Request, file: Express.Multer.File, cb: (error: Error | null, destination: string) => void) => {
@@ -29,7 +29,7 @@ projectRouter.post("/", upload.array('images', 10), async (req: Request, res: Re
 });
 projectRouter.get("/", getProjects);
 projectRouter.get("/:slug", getProject);
-// projectRouter.delete("/:slug", deleteProduct);
+projectRouter.delete("/:slug", deleteProject);
 
 
 export { projectRouter };

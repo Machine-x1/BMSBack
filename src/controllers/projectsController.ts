@@ -51,37 +51,17 @@ export const createProject = async (req:Request, res:Response, uuids: string[]) 
     }
   };
   
-//   // Update a category
-//   export const updateBerand = async (req:Request, res:Response) => {
-//     try {
-//       const brand = await Brand.findOne({ slug: req.params.slug });
-//       if (!brand) {
-//         return res.status(404).json({ message: 'brand not found' });
-//       }
-//       const { name, description } = req.body;
-//       brand.name = name;
-//       brand.description = description;
-//       await brand.save();
-//       res.status(200).json(brand);
-//     } catch (error:any) {
-//       if (error.code === 11000) {
-//         return res.status(400).json({ message: 'Category name or slug must be unique' });
-//       }
-//       res.status(400).json({ message: error.message });
-//     }
-//   };
-  
-//   // Delete a category
-//   export const deleteBrand = async (req:Request, res:Response) => {
-//     try {
-//       const brand = await Brand.findOneAndDelete({ slug: req.params.slug });
-//       if (!brand) {
-//         return res.status(404).json({ message: 'brand not found' });
-//       }
-//       // await category.remove();
-//       res.status(204).json();
-//     } catch (error:any) {
-//       res.status(500).json({ message: error.message });
-//     }
-//   };
+
+  export const deleteProject = async (req:Request, res:Response) => {
+    try {
+      const brand = await Project.findOneAndDelete({ slug: req.params.slug });
+      if (!brand) {
+        return res.status(404).json({ message: 'brand not found' });
+      }
+      // await category.remove();
+      res.status(204).json({ message: 'Project Deleted' });
+    } catch (error:any) {
+      res.status(500).json({ message: error.message });
+    }
+  };
   

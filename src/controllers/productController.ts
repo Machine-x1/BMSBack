@@ -7,29 +7,55 @@ export const listProduct = async (req: Request, res: Response) => {
     const page = parseInt(req.query.page as string) || 1;
     const limit = parseInt(req.query.limit as string) || 10;
     const skip = (page - 1) * limit;
-
+    
     const { search, category, brand } = req.query;
     
     let query: any = {};
-
+    
     if (search) {
       query.name = { $regex: search as string, $options: 'i' };
     }
-
+    
     if (category) {
-      if (mongoose.Types.ObjectId.isValid(category as string)) {
-        query.category = new mongoose.Types.ObjectId(category as string);
+      let categoryIds: string[];
+      if (typeof category === 'string') {
+        categoryIds = category.split(",");
+          
       } else {
-        return res.status(400).json({ message: 'Invalid category ID' });
+        categoryIds = category as string[];
+      }
+      const validCategoryIds = categoryIds.filter((id) => mongoose.Types.ObjectId.isValid(id));
+      if (validCategoryIds.length > 0) {
+        query.category = { $in: validCategoryIds.map((id) => new mongoose.Types.ObjectId(id)) };
+      } else {
+        return res.status(400).json({ message: 'Invalid category ID(s)' });
       }
     }
+
     if (brand) {
-      if (mongoose.Types.ObjectId.isValid(brand as string)) {
-        query.brand = new mongoose.Types.ObjectId(brand as string);
+      let brandIds: string[];
+      if (typeof brand === 'string') {
+        brandIds = brand.split(",");
+          
       } else {
-        return res.status(400).json({ message: 'Invalid category ID' });
+        brandIds = brand as string[];
+      }
+      const validCategoryIds = brandIds.filter((id) => mongoose.Types.ObjectId.isValid(id));
+      if (validCategoryIds.length > 0) {
+        query.brand = { $in: validCategoryIds.map((id) => new mongoose.Types.ObjectId(id)) };
+      } else {
+        return res.status(400).json({ message: 'Invalid Brand ID(s)' });
       }
     }
+    
+    // if (brand) {
+    //   if (mongoose.Types.ObjectId.isValid(brand as string)) {
+    //     query.brand = new mongoose.Types.ObjectId(brand as string);
+    //   } else {
+    //     return res.status(400).json({ message: 'Invalid brand ID' });
+    //   }
+    // }
+    
 
 
 
@@ -90,7 +116,7 @@ export const deleteProduct = async (req:Request, res:Response) => {
       return res.status(404).json({ message: 'Product not found' });
     }
     // await product.remove();
-    res.status(204).json();
+    res.status(204).json({ message: 'Product Deleted' });
   } catch (error:any) {
     res.status(500).json({ message: error.message });
   }

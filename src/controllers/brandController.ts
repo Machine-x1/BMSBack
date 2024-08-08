@@ -79,7 +79,7 @@ export const createBrand = async (req:Request, res:Response) => {
         return res.status(404).json({ message: 'brand not found' });
       }
       // await category.remove();
-      res.status(204).json();
+      res.status(204).json({ message: 'Brand Deleted' });
     } catch (error:any) {
       res.status(500).json({ message: error.message });
     }
