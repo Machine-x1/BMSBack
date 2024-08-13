@@ -5,13 +5,13 @@ const productSchema = new mongoose.Schema({
   name: {
     type: String,
     required: true,
-    text: true, // Add text index
+    text: true, 
 
   },
   description: {
     type: String,
     required: true,
-    text: true, // Add text index
+    text: true, 
 
   },
   images: {
@@ -42,6 +42,10 @@ const productSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Category',
     required: true
+  }, 
+  tag: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Tag',
   }, 
   brand: {
     type: mongoose.Schema.Types.ObjectId,
