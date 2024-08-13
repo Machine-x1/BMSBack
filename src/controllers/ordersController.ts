@@ -14,7 +14,6 @@ export const listOrders = async (req: Request, res: Response) => {
       .skip(skip)
       .limit(limit)
       .populate('items')
-    console.log(orders);
     
     const total = await Order.countDocuments();
     const totalPages = Math.ceil(total / limit);
@@ -67,7 +66,8 @@ export const updateStatus = async (req: Request, res: Response) => {
       return res.status(400).json({ message: 'Invalid status value' });
     }
 
-    const order = await Order.findByIdAndUpdate(id, { status },       { new: true, runValidators: true }
+    const order = await Order.findByIdAndUpdate(id, { status },       
+      { new: true, runValidators: true }
     );
     res.status(201).json({ order, message: 'Updated' });
   } catch (error: any) {
