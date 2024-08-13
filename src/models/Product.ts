@@ -29,6 +29,10 @@ const productSchema = new mongoose.Schema({
   model: {
     type: String,
     required: true
+  },  
+  quantity: {
+    type: String,
+    required: true
   },
   isFeatuerd: {
     type: Boolean,

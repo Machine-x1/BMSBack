@@ -93,8 +93,8 @@ export const showProduct = async (req:Request, res:Response) => {
 export const createProduct = async (req: Request, res: Response, uuids: string[]) => {
 
     try {
-      const { name, description,origin,dataSheet,model,isFeatuerd,category, brand } = req.body;
-      const product = new Product({ brand, name, description,origin,dataSheet,model,isFeatuerd:Boolean(Number(isFeatuerd)),category, images:uuids });
+      const { name, description,origin,dataSheet,model,isFeatuerd,category, brand, quantity } = req.body;
+      const product = new Product({ quantity, brand, name, description,origin,dataSheet,model,isFeatuerd:Boolean(Number(isFeatuerd)),category, images:uuids });
       await product.save();
       
       
