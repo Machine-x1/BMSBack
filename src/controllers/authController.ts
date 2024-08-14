@@ -25,7 +25,9 @@ export const loginAuth = async (req: Request, res: Response) => {
 
 // Middleware to verify the JWT
 export const verifyToken = (req: any, res: Response, next: NextFunction) => {
-  const token = req.headers.authorization?.split(" ")[1];
+  const token = req.headers.authorization
+  console.log(token);
+  
   if (!token) {
     return res.status(401).json({ message: "No token provided" });
   }

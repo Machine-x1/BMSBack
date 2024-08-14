@@ -13,6 +13,12 @@ import contactRoute from "./src/routes/contactRoute";
 import tagRouter from "./src/routes/tagRoute";
 import authRouter from "./src/routes/authRoute";
 import { verifyToken } from "./src/controllers/authController";
+import { productAPIRoute } from "./src/routes/api/productAPIRoute";
+import categoryAPIRoute from "./src/routes/api/categoryAPIRoute";
+import brandAPIRoute from "./src/routes/api/brandAPIRoute";
+import orderAPIRouter from "./src/routes/api/ordersAPIRoute";
+import { projectOrderAPIRoute } from "./src/routes/api/projectOrderAPIRoute";
+import contactAPIRoute from "./src/routes/api/contactAPIRoute";
 
 const app = express();
 app.use(json())
@@ -22,22 +28,38 @@ app.use(cors());
 // verifyToken middlware
 app.use("/public", express.static("public"));
 
-app.use((req, res, next) => {
-  if (req.path.startsWith('/auth')) {
-    return next();
-  }
+// app.use((req, res, next) => {
+//   if (req.path.startsWith('/auth')) {
+//     return next();
+//   }
+//   verifyToken(req, res, next);
+// });
+app.use("/dashboard", (req, res, next) => {
+  console.log(req.headers, "NEW");
+  
   verifyToken(req, res, next);
 });
 
-app.use("/product", productRouter);
-app.use("/category", categoryRouter);
-app.use("/brand", brandsRouter);
-app.use("/project", projectRouter);
-app.use("/order", orderRouter);
-app.use("/project-order", projectOrderRoute);
-app.use("/contact", contactRoute);
-app.use("/tag", tagRouter);
+
+app.use("/dashboard/product", productRouter);
+app.use("/dashboard/category", categoryRouter);
+app.use("/dashboard/brand", brandsRouter);
+app.use("/dashboard/project", projectRouter);
+app.use("/dashboard/order", orderRouter);
+app.use("/dashboard/project-order", projectOrderRoute);
+app.use("/dashboard/contact", contactRoute);
+app.use("/dashboard/tag", tagRouter);
 app.use("/auth", authRouter);
+
+app.use("/api/product", productAPIRoute);
+app.use("/api/category", categoryAPIRoute);
+app.use("/api/brand", brandAPIRoute);
+app.use("/api/order", orderAPIRouter);
+app.use("/api/project-order", projectOrderAPIRoute);
+app.use("/api/contact", contactAPIRoute);
+app.use("/api/tag", tagRouter);
+// app.use("/api/project", );
+// app.use("/api/auth", authRouter);
 
 app.listen(8000 || process.env.PORT, () => {
   console.log("Server is running on port " + 8000 || process.env.PORT);
