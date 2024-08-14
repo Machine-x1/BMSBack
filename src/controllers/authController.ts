@@ -6,7 +6,7 @@ const SECRET_KEY = "ZXCMKASD98741231!@#!@#@#$askdjnakjn";
 
 // Function to generate a JWT
 const generateJWT = (username: string) => {
-  return jwt.sign({ username }, SECRET_KEY, { expiresIn: "1h" });
+  return jwt.sign({ username }, SECRET_KEY, { expiresIn: "8h" });
 };
 
 export const loginAuth = async (req: Request, res: Response) => {

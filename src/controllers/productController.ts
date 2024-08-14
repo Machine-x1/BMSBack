@@ -48,17 +48,6 @@ export const listProduct = async (req: Request, res: Response) => {
       }
     }
     
-    // if (brand) {
-    //   if (mongoose.Types.ObjectId.isValid(brand as string)) {
-    //     query.brand = new mongoose.Types.ObjectId(brand as string);
-    //   } else {
-    //     return res.status(400).json({ message: 'Invalid brand ID' });
-    //   }
-    // }
-    
-
-
-
 
     const product = await Product.find(query)
       .skip(skip)
@@ -92,14 +81,18 @@ export const showProduct = async (req:Request, res:Response) => {
   }
 }
 export const createProduct = async (req: Request, res: Response, uuids: string[]) => {
-
+  
     try {
       const { name, description,origin,tag,dataSheet,model,isFeatuerd,category, brand, quantity } = req.body;
-      const product = new Product({ quantity,tag, brand, name, description,origin,dataSheet,model,isFeatuerd:Boolean(Number(isFeatuerd)),category, images:uuids });
+      const newTag = tag.split(",")
+
+      console.log(newTag);
+      
+      const product = new Product({ quantity,tag:newTag, brand, name, description,origin,dataSheet,model,isFeatuerd:Boolean(Number(isFeatuerd)),category, images:uuids });
       await product.save();
       
       
-      res.status(201).json({product:product});
+      res.status(201).json({product});
     } catch (error:any) {
       if (error.code === 11000) {
         return res.status(400).json({ message: 'Product name or slug must be unique' });
