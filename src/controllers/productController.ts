@@ -71,7 +71,7 @@ export const listProduct = async (req: Request, res: Response) => {
 };
 export const showProduct = async (req:Request, res:Response) => {
   try {
-    const category = await Product.findOne({ slug: req.params.slug }).populate('category').populate("brand");
+    const category = await Product.findOne({ slug: req.params.slug }).populate('category').populate("brand").populate('tag');
     if (!category) {
       return res.status(404).json({ message: 'Product not found' });
     }
@@ -86,7 +86,6 @@ export const createProduct = async (req: Request, res: Response, uuids: string[]
       const { name, description,origin,tag,dataSheet,model,isFeatuerd,category, brand, quantity } = req.body;
       const newTag = tag.split(",")
 
-      console.log(newTag);
       
       const product = new Product({ quantity,tag:newTag, brand, name, description,origin,dataSheet,model,isFeatuerd:Boolean(Number(isFeatuerd)),category, images:uuids });
       await product.save();
@@ -103,7 +102,6 @@ export const createProduct = async (req: Request, res: Response, uuids: string[]
   };
 export const deleteProduct = async (req:Request, res:Response) => {
   try {
-    console.log();
     
     const product = await Product.findOneAndDelete({ slug: req.params.slug });
     if (!product) {

@@ -5,7 +5,6 @@ export const createProjectOrder = async (req: Request, res: Response, uuid:strin
   
   try {
       const { name, phone,email,compnay,projectType} = req.body;
-      console.log(req.body);
       
       const projectOrder = new ProjectOrder({name,files:uuid, phone, email, compnay, projectType, status:"Not Started"});
         await projectOrder.save();

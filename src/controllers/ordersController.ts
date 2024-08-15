@@ -81,7 +81,7 @@ export const deleteOrder = async (req:Request, res:Response) => {
   try {
     console.log();
     
-    const product = await Order.findOneAndDelete({ id: req.query.id });
+    const product = await Order.findOneAndDelete({ id: req.params.id });
     if (!product) {
       return res.status(404).json({ message: 'Order not found' });
     }
