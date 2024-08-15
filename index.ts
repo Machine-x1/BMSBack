@@ -19,26 +19,37 @@ import brandAPIRoute from "./src/routes/api/brandAPIRoute";
 import orderAPIRouter from "./src/routes/api/ordersAPIRoute";
 import { projectOrderAPIRoute } from "./src/routes/api/projectOrderAPIRoute";
 import contactAPIRoute from "./src/routes/api/contactAPIRoute";
+import { rateLimit } from 'express-rate-limit'
 
 const app = express();
 app.use(json())
 connectToDatabase()
 app.use(cors());
 
-// verifyToken middlware
 app.use("/public", express.static("public"));
 
-// app.use((req, res, next) => {
-//   if (req.path.startsWith('/auth')) {
-//     return next();
-//   }
-//   verifyToken(req, res, next);
+
+
+const limiter = rateLimit({
+	windowMs: 15 * 60 * 1000, 
+	limit: 150, 
+	standardHeaders: 'draft-7',
+  legacyHeaders: false, // Disable the 'X-RateLimit-*' headers
+  message: async (req, res) => {
+			return {status:429, message:'Too many requests from this IP, please try again later.'}
+	},
+
+})
+
+app.use(limiter)
+
 // });
 app.use("/dashboard", (req, res, next) => {
   console.log(req.headers, "NEW");
   
   verifyToken(req, res, next);
 });
+
 
 
 app.use("/dashboard/product", productRouter);
