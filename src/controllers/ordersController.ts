@@ -8,13 +8,21 @@ export const listOrders = async (req: Request, res: Response) => {
     const page = parseInt(req.query.page as string) || 1;
     const limit = parseInt(req.query.limit as string) || 10;
     const skip = (page - 1) * limit;
-    
+    const id = req.query.id as string; // Get the ID from the query parameters
 
-    const orders = await Order.find()
-      .skip(skip)
-      .limit(limit)
-      .populate('items')
-    
+    let orders;
+    if (id) {
+      const last5Digits = id.slice(-5);
+
+      orders = await Order.find({ _id: { $regex: `.*${last5Digits}$` } }) 
+        .skip(skip)
+        .limit(limit)
+    } else {
+      orders = await Order.find()
+        .skip(skip)
+        .limit(limit)
+    }
+
     const total = await Order.countDocuments();
     const totalPages = Math.ceil(total / limit);
 
