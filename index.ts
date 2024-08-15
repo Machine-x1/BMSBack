@@ -31,8 +31,8 @@ app.use("/public", express.static("public"));
 
 
 const limiter = rateLimit({
-	windowMs: 15 * 60 * 1000, 
-	limit: 150, 
+	windowMs: 60 * 60 * 1000, 
+	limit: 500, 
 	standardHeaders: 'draft-7',
   legacyHeaders: false, // Disable the 'X-RateLimit-*' headers
   message: async (req, res) => {
