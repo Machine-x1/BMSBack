@@ -75,7 +75,6 @@ export const listProjectOrders = async (req: Request, res: Response) => {
       const orders = await ProjectOrder.find()
         .skip(skip)
         .limit(limit)
-        .populate('items');
 
       const total = await ProjectOrder.countDocuments();
       const totalPages = Math.ceil(total / limit);
