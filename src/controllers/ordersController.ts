@@ -12,15 +12,20 @@ export const listOrders = async (req: Request, res: Response) => {
 
     let orders;
     if (id) {
+      // Extract the last 5 digits of the ID
       const last5Digits = id.slice(-5);
 
+      // Use a regular expression to find orders with IDs ending in the last 5 digits
       orders = await Order.find({ _id: { $regex: `.*${last5Digits}$` } }) 
         .skip(skip)
         .limit(limit)
+        .populate('items');
     } else {
+      // Otherwise, fetch all orders
       orders = await Order.find()
         .skip(skip)
         .limit(limit)
+        .populate('items');
     }
 
     const total = await Order.countDocuments();
