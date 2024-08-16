@@ -61,7 +61,7 @@ export const createContact = async (req: Request, res: Response) => {
 export const deleteContact = async (req:Request, res:Response) => {
   try {
     
-    const product = await Contact.findOneAndDelete({ id: req.query.id });
+    const product = await Contact.findOneAndDelete({ _id: req.params.id });
     if (!product) {
       return res.status(404).json({ message: 'Contact not found' });
     }
