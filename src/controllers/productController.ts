@@ -8,7 +8,7 @@ export const listProduct = async (req: Request, res: Response) => {
     const limit = parseInt(req.query.limit as string) || 10;
     const skip = (page - 1) * limit;
     
-    const { search, category, brand } = req.query;
+    const { search, category, brand, tag } = req.query;
     
     let query: any = {};
     
@@ -43,6 +43,21 @@ export const listProduct = async (req: Request, res: Response) => {
       const validCategoryIds = brandIds.filter((id) => mongoose.Types.ObjectId.isValid(id));
       if (validCategoryIds.length > 0) {
         query.brand = { $in: validCategoryIds.map((id) => new mongoose.Types.ObjectId(id)) };
+      } else {
+        return res.status(400).json({ message: 'Invalid Brand ID(s)' });
+      }
+    }
+    if (tag) {
+      let tags: string[];
+      if (typeof tag === 'string') {
+        tags = tag.split(",");
+          
+      } else {
+        tags = tag as string[];
+      }
+      const validTagsIds = tags.filter((id) => mongoose.Types.ObjectId.isValid(id));
+      if (validTagsIds.length > 0) {
+        query.tag = { $in: validTagsIds.map((id) => new mongoose.Types.ObjectId(id)) };
       } else {
         return res.status(400).json({ message: 'Invalid Brand ID(s)' });
       }

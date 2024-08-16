@@ -1,5 +1,4 @@
-import { Document, Model, Schema, model } from 'mongoose';
-const mongoose = require('mongoose');
+import mongoose, { Document, Model, Schema, model } from 'mongoose';
 
 // Define a TypeScript interface for the Order document
 interface IOrder extends Document {
@@ -9,7 +8,10 @@ interface IOrder extends Document {
   address: string;
   status: "pending" | "processing" | "shipped" | "delivered" | "cancelled" | "returned";
   createdAt: Date;
-  items:[]
+  items: {
+    product: mongoose.Schema.Types.ObjectId;
+    quantity: number;
+  }[];
   updatedAt: Date;
 }
 
@@ -36,8 +38,17 @@ const orderSchema: Schema<IOrder> = new Schema({
     enum: ["pending", "processing", "shipped", "delivered", "cancelled", "returned"]
   },
   items: {
-    type: [mongoose.Schema.Types.ObjectId],
-    ref: 'Product',
+    type: [{
+      product: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Product',
+        required: true
+      },
+      quantity: {
+        type: Number,
+        required: true,
+      }
+    }],
     required: true
   },
   createdAt: {
@@ -49,6 +60,12 @@ const orderSchema: Schema<IOrder> = new Schema({
     default: Date.now
   }
 });
+
+// // Update updatedAt field before saving
+// orderSchema.pre('save', function (next) {
+//   this.updatedAt = Date.now();
+//   next();
+// });
 
 const Order: Model<IOrder> = model<IOrder>('Order', orderSchema);
 

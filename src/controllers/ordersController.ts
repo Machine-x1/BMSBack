@@ -9,23 +9,22 @@ export const listOrders = async (req: Request, res: Response) => {
     const limit = parseInt(req.query.limit as string) || 10;
     const skip = (page - 1) * limit;
     const id = req.query.id as string; // Get the ID from the query parameters
-
+    
     let orders;
     if (id) {
       // Extract the last 5 digits of the ID
-      const last5Digits = id.slice(-5);
 
       // Use a regular expression to find orders with IDs ending in the last 5 digits
-      orders = await Order.find({ _id: { $regex: `.*${last5Digits}$` } }) 
+      orders = await Order.find({ name: { $regex: `.*${id}$` } }) 
         .skip(skip)
         .limit(limit)
-        .populate('items');
+        .populate({ path: 'items.product' })
     } else {
       // Otherwise, fetch all orders
       orders = await Order.find()
         .skip(skip)
         .limit(limit)
-        .populate('items');
+        .populate({ path: 'items.product' })
     }
 
     const total = await Order.countDocuments();
@@ -43,7 +42,11 @@ export const listOrders = async (req: Request, res: Response) => {
 };
 export const showOrder = async (req:Request, res:Response) => {
   try {
-    const order = await Order.findOne({ id: req.query.id }).populate('items')
+
+    const {id} = req.params
+    const order = await Order.findOne({ name:id}).populate({ path: 'items.product' }); // Populate the product field
+    
+    console.log(order);
 
     if (!order) {
       return res.status(404).json({ message: 'Order not found' });
@@ -56,7 +59,6 @@ export const showOrder = async (req:Request, res:Response) => {
 export const createOrder = async (req: Request, res: Response) => {
     try {
       const { customerName, customerPhone,customerEmail,customerAddress,items} = req.body;
-      console.log(req.body);
       
       const order = new Order({ name:customerName, phone:customerPhone,email:customerEmail,address:customerAddress,status:"pending",items });
         await order.save();
@@ -92,9 +94,9 @@ export const updateStatus = async (req: Request, res: Response) => {
 };
 export const deleteOrder = async (req:Request, res:Response) => {
   try {
-    console.log();
-    
-    const product = await Order.findOneAndDelete({ id: req.params.id });
+      console.log(req.params.id );
+      
+    const product = await Order.findOneAndDelete({ name: req.params.id });
     if (!product) {
       return res.status(404).json({ message: 'Order not found' });
     }
