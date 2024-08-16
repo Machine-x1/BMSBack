@@ -13,9 +13,10 @@ export const listOrders = async (req: Request, res: Response) => {
     let orders;
     if (id) {
       // Extract the last 5 digits of the ID
+// const last5Digits = id.slice(-5); // Extract last 5 digits
 
       // Use a regular expression to find orders with IDs ending in the last 5 digits
-      orders = await Order.find({ _id: { $regex: `.*${id}$` } }) 
+      orders = await Order.find({ name: { $regex: id, $options: 'i' } }) 
         .skip(skip)
         .limit(limit)
         .populate({ path: 'items.product' })
