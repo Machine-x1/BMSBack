@@ -4,7 +4,7 @@ import express, { Request, Response, Router } from "express";
 import multer, { Multer } from "multer";
 import path from "path";
 import { v4 as uuidv4 } from 'uuid';
-import { createProjectOrder } from "../../controllers/ProjectOrderController";
+import { createProjectOrder, deleteOrderProject, listProjectOrders, updateStatusProject } from "../../controllers/ProjectOrderController";
 const storage: multer.StorageEngine = multer.diskStorage({
   destination: (req: Request, file: Express.Multer.File, cb: (error: Error | null, destination: string) => void) => {
     cb(null, path.join(__dirname, '../../public/images'));
@@ -29,6 +29,11 @@ projectOrderAPIRoute.post("/", upload.array('files', 10), async (req: Request, r
     res.status(500).json({ message: 'Error creating product' });
   }
 });
+
+projectOrderAPIRoute.get('/', listProjectOrders);
+projectOrderAPIRoute.delete('/:id', deleteOrderProject);
+projectOrderAPIRoute.put('/:id/status', updateStatusProject);
+
 
 
 
