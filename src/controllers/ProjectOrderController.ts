@@ -42,7 +42,7 @@ export const updateStatusProject = async (req: Request, res: Response) => {
 export const deleteOrderProject = async (req:Request, res:Response) => {
   try {
     
-    const product = await ProjectOrder.findOneAndDelete({ id: req.query.id });
+    const product = await ProjectOrder.findOneAndDelete({ id: req.params.id });
     if (!product) {
       return res.status(404).json({ message: 'Project Order not found' });
     }
