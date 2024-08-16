@@ -7,7 +7,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { createProjectOrder, deleteOrderProject, listProjectOrders, updateStatusProject } from "../../controllers/ProjectOrderController";
 const storage: multer.StorageEngine = multer.diskStorage({
   destination: (req: Request, file: Express.Multer.File, cb: (error: Error | null, destination: string) => void) => {
-    cb(null, path.join(__dirname, '../../public/images'));
+    cb(null, path.join(__dirname, '../../../public/images'));
   },
   filename: (req: Request, file: Express.Multer.File, cb: (error: Error | null, filename: string) => void) => {
     const fileExtension = path.extname(file.originalname);
