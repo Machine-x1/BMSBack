@@ -15,7 +15,7 @@ export const listOrders = async (req: Request, res: Response) => {
       // Extract the last 5 digits of the ID
 
       // Use a regular expression to find orders with IDs ending in the last 5 digits
-      orders = await Order.find({ name: { $regex: `.*${id}$` } }) 
+      orders = await Order.find({ _id: { $regex: `.*${id}$` } }) 
         .skip(skip)
         .limit(limit)
         .populate({ path: 'items.product' })
@@ -44,7 +44,7 @@ export const showOrder = async (req:Request, res:Response) => {
   try {
 
     const {id} = req.params
-    const order = await Order.findOne({ name:id}).populate({ path: 'items.product' }); // Populate the product field
+    const order = await Order.findOne({ _id:id}).populate({ path: 'items.product' }); // Populate the product field
     
     console.log(order);
 
@@ -94,9 +94,8 @@ export const updateStatus = async (req: Request, res: Response) => {
 };
 export const deleteOrder = async (req:Request, res:Response) => {
   try {
-      console.log(req.params.id );
       
-    const product = await Order.findOneAndDelete({ name: req.params.id });
+    const product = await Order.findOneAndDelete({ _id: req.params.id });
     if (!product) {
       return res.status(404).json({ message: 'Order not found' });
     }
