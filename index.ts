@@ -20,6 +20,7 @@ import orderAPIRouter from "./src/routes/api/ordersAPIRoute";
 import { projectOrderAPIRoute } from "./src/routes/api/projectOrderAPIRoute";
 import contactAPIRoute from "./src/routes/api/contactAPIRoute";
 import { rateLimit } from 'express-rate-limit'
+import { projectAPIRouter } from "./src/routes/api/projectAPIRoute";
 
 const app = express();
 app.use(json())
@@ -31,13 +32,13 @@ app.use("/public", express.static("public"));
 
 
 const limiter = rateLimit({
-	windowMs: 60 * 60 * 1000, 
-	limit: 500, 
-	standardHeaders: 'draft-7',
+  windowMs: 60 * 60 * 1000,
+  limit: 500,
+  standardHeaders: 'draft-7',
   legacyHeaders: false, // Disable the 'X-RateLimit-*' headers
   message: async (req, res) => {
-			return {status:429, message:'Too many requests from this IP, please try again later.'}
-	},
+    return { status: 429, message: 'Too many requests from this IP, please try again later.' }
+  },
 
 })
 
@@ -46,7 +47,7 @@ app.use(limiter)
 // });
 app.use("/dashboard", (req, res, next) => {
   console.log(req.headers, "NEW");
-  
+
   verifyToken(req, res, next);
 });
 
@@ -69,7 +70,7 @@ app.use("/api/order", orderAPIRouter);
 app.use("/api/project-order", projectOrderAPIRoute);
 app.use("/api/contact", contactAPIRoute);
 app.use("/api/tag", tagRouter);
-// app.use("/api/project", );
+app.use("/api/project", projectAPIRouter);
 // app.use("/api/auth", authRouter);
 
 app.listen(8000 || process.env.PORT, () => {
