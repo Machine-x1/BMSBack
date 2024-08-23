@@ -9,23 +9,19 @@ export const listOrders = async (req: Request, res: Response) => {
     const limit = parseInt(req.query.limit as string) || 10;
     const skip = (page - 1) * limit;
     const id = req.query.id as string; // Get the ID from the query parameters
-    
-    let orders;
-    if (id) {
-      // Extract the last 5 digits of the ID
-// const last5Digits = id.slice(-5); // Extract last 5 digits
+    const clientOrderId = req.query.order_id as string; // Get the clientOrderId from the query parameters
 
-      // Use a regular expression to find orders with IDs ending in the last 5 digits
-      orders = await Order.find({ name: { $regex: id, $options: 'i' } }) 
+    let orders;
+    if (clientOrderId) {
+      orders = await Order.find({ clientOrderId })
         .skip(skip)
         .limit(limit)
-        .populate({ path: 'items.product' })
+        .populate({ path: 'items.product' });
     } else {
-      // Otherwise, fetch all orders
       orders = await Order.find()
         .skip(skip)
         .limit(limit)
-        .populate({ path: 'items.product' })
+        .populate({ path: 'items.product' });
     }
 
     const total = await Order.countDocuments();
@@ -61,10 +57,17 @@ export const createOrder = async (req: Request, res: Response) => {
     try {
       const { customerName, customerPhone,customerEmail,customerAddress,items} = req.body;
       
-      const order = new Order({ name:customerName, phone:customerPhone,email:customerEmail,address:customerAddress,status:"pending",items });
-        await order.save();
+      let clientOrderId: string;
+      let order: any;
+      do {
+        clientOrderId = Math.floor(10000 + Math.random() * 90000).toString();
+        order = await Order.findOne({ clientOrderId });
+      } while (order);
 
-      res.status(201).json({order, message:"Created"});
+      const newOrder = new Order({ clientOrderId, name:customerName, phone:customerPhone,email:customerEmail,address:customerAddress,status:"pending",items });
+        await newOrder.save();
+
+      res.status(201).json({order:newOrder, message:"Created"});
     } catch (error:any) {
       if (error.code === 11000) {
         return res.status(400).json({ message: 'order name or slug must be unique' });

@@ -32,7 +32,8 @@ const productSchema = new mongoose.Schema({
   },  
   quantity: {
     type: String,
-    required: true
+    required: false,
+    default: "0"
   },
   isFeatuerd: {
     type: Boolean,
@@ -47,7 +48,9 @@ const productSchema = new mongoose.Schema({
     {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Tag',
-    }
+      required: false
+
+    },
   ], 
   brand: {
     type: mongoose.Schema.Types.ObjectId,

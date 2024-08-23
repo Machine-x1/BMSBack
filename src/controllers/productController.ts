@@ -47,6 +47,8 @@ export const listProduct = async (req: Request, res: Response) => {
         return res.status(400).json({ message: 'Invalid Brand ID(s)' });
       }
     }
+
+    
     if (tag) {
       let tags: string[];
       if (typeof tag === 'string') {
@@ -99,8 +101,15 @@ export const createProduct = async (req: Request, res: Response, uuids: string[]
   
     try {
       const { name, description,origin,tag,dataSheet,model,isFeatuerd,category, brand, quantity } = req.body;
-      const newTag = tag.split(",")
-
+      // let newTag = ""
+      // if (tag) {
+      //   newTag = tag.split(",")
+      // }
+      let newTag: any[] = [];
+      if (tag) {
+        newTag = tag.split(",");
+      }
+  
       
       const product = new Product({ quantity,tag:newTag, brand, name, description,origin,dataSheet,model,isFeatuerd:Boolean(Number(isFeatuerd)),category, images:uuids });
       await product.save();
@@ -130,5 +139,28 @@ export const deleteProduct = async (req:Request, res:Response) => {
 };
 
 
-export const UpdateProduct = () => {}
+export const UpdateProduct = async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params;
+    const updateData = req.body;
 
+    const product = await Product.findByIdAndUpdate(
+      id,
+      {
+        $set: updateData,
+      },
+      { new: true, runValidators: true }
+    );
+
+    if (!product) {
+      return res.status(404).json({ message: 'Product not found' });
+    }
+
+    res.status(200).json(product);
+  } catch (error: any) {
+    if (error.code === 11000) {
+      return res.status(400).json({ message: 'Product name or slug must be unique' });
+    }
+    res.status(400).json({ message: error.message });
+  }
+};

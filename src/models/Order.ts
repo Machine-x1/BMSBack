@@ -6,6 +6,7 @@ interface IOrder extends Document {
   phone: string;
   email: string;
   address: string;
+  clientOrderId: string;
   status: "pending" | "processing" | "shipped" | "delivered" | "cancelled" | "returned";
   createdAt: Date;
   items: {
@@ -20,6 +21,7 @@ const orderSchema: Schema<IOrder> = new Schema({
     type: String,
     required: true,
   },
+  clientOrderId: { type: String, required: true, unique: true },
   phone: {
     type: String,
     required: true

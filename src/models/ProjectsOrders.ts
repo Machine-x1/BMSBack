@@ -8,6 +8,7 @@ interface IProjectOrder extends Document {
   email: string;
   compnay: string;
   projectType: string;
+  description: string
   files: string[]
   status: "Not Started" | "In Progress" | "Under Review" | "Completed" | "On Hold" | "Cancelled";
   createdAt: Date;
@@ -16,6 +17,10 @@ interface IProjectOrder extends Document {
 
 const projectsOrderSchema: Schema<IProjectOrder> = new Schema({
   name: {
+    type: String,
+    required: true,
+  },
+   description: {
     type: String,
     required: true,
   },

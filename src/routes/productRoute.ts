@@ -1,5 +1,5 @@
 import express, { Request, Response, Router } from "express";
-import {  createProduct, deleteProduct, listProduct, showProduct,  } from "../controllers/productController";
+import {  createProduct, deleteProduct, listProduct, showProduct, UpdateProduct,  } from "../controllers/productController";
 import multer, { Multer } from "multer";
 import path from "path";
 import { v4 as uuidv4 } from 'uuid';
@@ -31,5 +31,6 @@ productRouter.post("/", upload.array('images', 10), async (req: Request, res: Re
 productRouter.get("/", listProduct);
 productRouter.get("/:slug", showProduct);
 productRouter.delete("/:slug", deleteProduct);
+productRouter.put("/:id", UpdateProduct);
 
 export { productRouter };

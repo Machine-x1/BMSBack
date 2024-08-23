@@ -73,6 +73,6 @@ app.use("/api/tag", tagRouter);
 app.use("/api/project", projectAPIRouter);
 // app.use("/api/auth", authRouter);
 
-app.listen(8000 || process.env.PORT, () => {
-  console.log("Server is running on port " + 8000 || process.env.PORT);
+app.listen(8080 || process.env.PORT, () => {
+  console.log("Server is running on port " + 8080 || process.env.PORT);
 });

@@ -4,9 +4,9 @@ import ProjectOrder from "../models/ProjectsOrders";
 export const createProjectOrder = async (req: Request, res: Response, uuid:string[]) => {
   
   try {
-      const { name, phone,email,compnay,projectType} = req.body;
+      const { name, phone,email,compnay,projectType, description} = req.body;
       
-      const projectOrder = new ProjectOrder({name,files:uuid, phone, email, compnay, projectType, status:"Not Started"});
+      const projectOrder = new ProjectOrder({name,files:uuid, phone, email, description, compnay, projectType, status:"Not Started"});
         await projectOrder.save();
 
       res.status(201).json({projectOrder, message:"Created"});
